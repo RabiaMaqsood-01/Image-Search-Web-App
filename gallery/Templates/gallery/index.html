@@ -1,0 +1,235 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discover Visual Wonders | ImageSearch</title>
+  <style>
+    :root {
+      --primary: #e60023;
+      --primary-dark: #ad081b;
+      --accent: #00b894;
+      --text-light: rgba(255,255,255,0.9);
+    }
+    
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    
+    body {
+      margin: 0;
+      padding: 0;
+      background-image: url("https://images.pexels.com/photos/956999/milky-way-starry-sky-night-sky-star-956999.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      overflow-x: hidden;
+    }
+    
+    .hero {
+      text-align: center;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      margin-bottom: 1.5rem;
+      background: linear-gradient(to right, #fff 0%, #ddd 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      line-height: 1.2;
+    }
+    
+    .tagline {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      max-width: 700px;
+      margin: 0 auto 3rem;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+    
+    .feature-card {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.1);
+      opacity: 0;
+      transform: translateY(20px);
+      position: relative;
+    }
+    
+    /* Center card styling */
+    .feature-card:nth-child(2) {
+      background: rgba(230, 0, 35, 0.15);
+      border: 1px solid rgba(230, 0, 35, 0.3);
+      transform: scale(1) translateY(20px);
+    }
+    
+    .feature-card:nth-child(1) { animation: fadeInUp 0.6s 0.2s forwards; }
+    .feature-card:nth-child(2) { 
+      animation: fadeInUp 0.6s 0.4s forwards, pulse 2s 1.5s infinite alternate; 
+      z-index: 1;
+    }
+    .feature-card:nth-child(3) { animation: fadeInUp 0.6s 0.6s forwards; }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255,255,255,0.15);
+    }
+    
+    /* Special hover for center card */
+    .feature-card:nth-child(2):hover {
+      transform: translateY(-5px) scale(1.02);
+      background: rgba(230, 0, 35, 0.2);
+    }
+    
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    /* Center icon styling */
+    .feature-card:nth-child(2) .feature-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1.2rem;
+    }
+    
+    .feature-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    
+    /* Center title styling */
+    .feature-card:nth-child(2) .feature-title {
+      font-size: 1.7rem;
+      color: var(--text-light);
+    }
+    
+    .feature-desc {
+      opacity: 0.8;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+    
+    .cta-button {
+      padding: 1rem 3rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      background: linear-gradient(to right, var(--primary) 0%, var(--accent) 100%);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(230, 0, 35, 0.3);
+      margin-top: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 25px rgba(112, 8, 24, 0.85);
+    }
+    
+    .cta-button::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.2) 50%,
+        rgba(255,255,255,0) 100%
+      );
+      transform: rotate(30deg);
+      transition: all 0.5s ease;
+    }
+    
+    .cta-button:hover::after {
+      left: 100%;
+    }
+    
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes pulse {
+      to {
+        transform: translateY(0) scale(1.03);
+        box-shadow: 0 10px 30px rgba(230, 0, 35, 0.2);
+      }
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin: 2rem auto;
+      }
+      
+      .feature-card:nth-child(2) {
+        transform: scale(1) translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1>Welcome to Visual World</h1>
+    <p class="tagline">Find inspiration in millions of stunning images with our intelligent search platform</p>
+    
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3 class="feature-title">Smart Search</h3>
+        <p class="feature-desc">Find exactly what you're looking for with our visual search technology</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">❤️</div>
+        <h3 class="feature-title">Save & Organize</h3>
+        <p class="feature-desc">Build beautiful collections of your favorite images with one click</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">✨</div>
+        <h3 class="feature-title">Beautiful Discovery</h3>
+        <p class="feature-desc">Explore curated collections tailored to your interests</p>
+      </div>
+    </div>
+    
+    <button class="cta-button" onclick="window.location.href='{% url 'home' %}'">
+      Start Exploring Now
+    </button>
+  </div>
+</body>
+</html>

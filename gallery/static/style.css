@@ -1,0 +1,259 @@
+
+
+/* Base Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    color: #ffffff;
+
+}
+
+
+.hero-section {
+  background-image: url("https://images.unsplash.com/photo-1552361308-5b91dc7a3afd?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 467px; /* Adjust height if needed */
+  width: 100%; 
+              /* Add display flex to center content */
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: white;
+  padding-top: 50px;
+}
+
+.other-content {
+  background-color: white;
+  padding: 20px;
+}
+
+
+
+
+
+/* Header Styles */
+.header {
+    background-color: rgb(0, 0, 0);
+    padding: 15px 20px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    color: #e60023;
+    font-weight: bold;
+    font-size: 30px;
+    text-decoration: none;
+}
+
+.camera-icon {
+    font-size: 45px;
+    line-height: 0;
+    margin-right: 5px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.nav-links a {
+    color: #fcfcfc;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.nav-links a:hover {
+    background-color: #196002;
+}
+
+.favorites-link {
+    background-color: #e60023;
+    color: white !important;
+}
+
+.favorites-link:hover {
+    background-color: #ad081b !important;
+}
+
+/* Main Content */
+.main-content {
+    
+    
+}
+
+/* Search Form */
+.search-form {
+    display: flex;
+    max-width: 600px;
+    margin: 0 auto 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.search-form input[type="text"] {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    font-size: 16px;
+    outline: none;
+    background-color: #bcd7ca;
+}
+
+.search-form button {
+    background-color: #e60023;
+    color: white;
+    border: none;
+    padding: 0 24px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.search-form button:hover {
+    background-color: #ad081b;
+}
+
+/* Image Grid */
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+    padding: 16px;
+}
+
+.image-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.image-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.image-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 16px 16px 0 0;
+}
+
+.image-actions {
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.image-actions form {
+    margin: 0;
+}
+
+.image-actions button {
+    background-color: #bbdab3;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.image-actions button:hover {
+    background-color: #e60023;
+    color: white;
+}
+
+.remove-btn {
+    color: #e60023;
+    background-color: #cddbeb !important;
+}
+
+.remove-btn:hover {
+    background-color: #e60023 !important;
+    color: white !important;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+    gap: 10px;
+}
+
+.pagination a {
+    background-color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+    color: #333;
+    text-decoration: none;
+}
+
+.pagination a:hover {
+    background-color: #e60023;
+    color: white;
+}
+
+/* Footer */
+.footer {
+    background-color: rgb(0, 0, 0);
+    padding: 20px;
+    text-align: center;
+    color: #e9e8e8;
+    margin-top: 40px;
+    box-shadow: 0 -1px 5px rgba(0,0,0,0.1);
+}
+
+/* Search Query */
+.search-query {
+    margin: 20px 0;
+    font-size: 18px;
+    color: #666;
+    text-align: center;
+}
+
+.search-query strong {
+    color: #e60023;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    background-color: white;
+    border-radius: 16px;
+    margin: 20px 0;
+    grid-column: 1 / -1;
+}
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,291 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visual World</title>
+
+    <link rel="stylesheet" href="{% static 'style.css' %}?v=2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    
+    <header class="header">
+        <a href="/" class="logo"><span class="camera-icon">📽️</span>Visual World</a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/favorites/" class="favorites-link">Favorites</a>
+
+            {% if user.is_authenticated %}
+                   <span>Welcome, {{ user.username }}</span>
+              <form method="post" action="{% url 'logout' %}" style="display: inline;">
+            {% csrf_token %}
+                 <button type="submit" style="background: none; border: none; color: #fcfcfc; cursor: pointer; padding: 8px 16px;">Logout</button>
+              </form>
+            {% else %}
+                  <a href="{% url 'login' %}">Login</a>
+                  <a href="{% url 'register' %}">Register</a>
+{% endif %}
+
+        </div>
+    </header>
+
+<main class="main-content">
+    <div class="hero-section">
+        
+        <p class="quote" style="margin-top: 80px; font-size: 18px; font-style: italic; color: #f0f0f0; text-align: center;">
+            "Every image is a silent storyteller, capturing moments the eyes see but the heart feels. Let your search lead you to <br> emotions, memories, and wonders you never knew existed."
+        </p>
+
+        <br>
+
+        <form method="get" class="search-form">
+            <input type="text" name="q" placeholder="Type something (e.g. cats)" required 
+                   value="{{ request.GET.q|default:'' }}">
+            <button type="submit">Search</button>
+        </form>
+       
+    </div>
+    
+  <div class="other-content">
+    
+        {% if request.GET.q %}
+        <div class="search-query">
+            Showing results for: <strong>{{ request.GET.q }}</strong>
+        </div>
+        {% endif %}
+
+        <div class="image-grid">
+            {% for img in images %}
+                <div class="image-card" id="img{{ forloop.counter }}">
+                    <img src="{{ img.src.medium }}" alt="{{ img.alt }}">
+
+                    <button type="button" onclick="openModal('{{ img.src.medium }}', '{{ img.alt|escapejs }}')" 
+                     style="background-color:#95b6f4; color:rgb(0, 0, 0); border:none; padding:10px 16px; border-radius:15px; cursor:pointer; font-size:14px; margin-top:10px;margin-left:18px;">
+                      View </button>
+
+                    <div class="image-actions">
+                        
+                        {% if img.src.medium in favorite_urls %}
+                            <form method="post" action="/delete_by_url/">
+                                {% csrf_token %}
+                                <input type="hidden" name="image_url" value="{{ img.src.medium }}">
+                                <input type="hidden" name="search_query" value="{{ request.GET.q }}">
+                                <input type="hidden" name="image_index" value="{{ forloop.counter }}">
+                                <input type="hidden" name="page" value="{{ page }}">
+                                <button type="submit" class="remove-btn">Remove</button>
+                            </form>
+                        {% else %}
+                            <form method="post" action="/save_favorite/">
+                                {% csrf_token %}
+                                <input type="hidden" name="image_url" value="{{ img.src.medium }}">
+                                <input type="hidden" name="alt_text" value="{{ img.alt }}">
+                                <input type="hidden" name="search_query" value="{{ request.GET.q }}">
+                                <input type="hidden" name="image_index" value="{{ forloop.counter }}">
+                                <input type="hidden" name="page" value="{{ page }}">
+                                <button type="submit">Add to Favorite</button>
+                            </form>
+                        {% endif %}
+                        
+                    </div>
+                </div>   
+            {% endfor %}    
+        </div>
+
+        {% if images %}
+            <div class="pagination">
+                {% if page > 1 %}
+                    <a href="/?q={{ request.GET.q }}&page={{ page|add:"-1" }}">⬅ Previous</a>
+                {% endif %}
+                <a href="/?q={{ request.GET.q }}&page={{ page|add:"1" }}">Next ➡</a>
+            </div>
+        {% endif %}
+        
+    </main>
+
+    <footer class="footer">
+        <p>© {% now "Y" %} Visual World   by Rabia Maqsood</p>
+    </footer>
+    
+ </div> 
+ 
+ 
+<!-- Modal container -->
+<div id="imageModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:1000;">
+  <div style="position:relative; max-width:90%; max-height:90%; margin:auto; display:flex; flex-direction:column; align-items:center;">
+    <span onclick="closeModal()" style="position:absolute; top:10px; right:20px; font-size:30px; color:white; cursor:pointer;">&times;</span>
+    <img id="modalImage" src="" alt="" style="max-width:100%; max-height:80vh; display:block; margin: 0 auto;">
+    <p id="modalCaption" style="color:#eee; text-align:center; margin-top:30px;"></p>
+    <a id="downloadLink" href="#" download style="color:rgb(255, 255, 255);background-color:red; display:block; text-align:center; margin-top:10px;">Download Image</a>
+  </div>
+</div>
+
+
+
+<script>
+function openModal(imgSrc, altText) {
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    const caption = document.getElementById('modalCaption');
+    const downloadLink = document.getElementById('downloadLink');
+    
+    modal.style.display = 'flex';
+    modalImg.src = imgSrc;
+    modalImg.alt = altText;
+    caption.textContent = altText || '';
+    downloadLink.href = imgSrc;
+}
+
+function closeModal() {
+    const modal = document.getElementById('imageModal');
+    modal.style.display = 'none';
+}
+
+// Close modal if user clicks outside the modal content
+window.onclick = function(event) {
+    const modal = document.getElementById('imageModal');
+    if (event.target === modal) {
+        closeModal();
+    }
+}
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+<!--
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Search</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <h2>Search for Images</h2>
+    <form method="get">
+        <input type="text" name="q" placeholder="Type something (e.g. cats)" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <h1>Search Results</h1>
+
+    <div class="image-grid">
+        {% for img in images %}
+            <div class="image-card" id="img{{ forloop.counter }}">
+                <img src="{{ img.src.medium }}" alt="{{ img.alt }}">
+                <div class="image-actions">
+                    {% if img.src.medium in favorite_urls %}
+                        <form method="post" action="{% url 'delete_by_url' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="image_url" value="{{ img.src.medium }}">
+                            <input type="hidden" name="search_query" value="{{ request.GET.q }}">
+                            <input type="hidden" name="image_index" value="{{ forloop.counter }}">
+                            <input type="hidden" name="page" value="{{ page }}">
+                            <button type="submit">Remove</button>
+                        </form>
+                    {% else %}
+                        <form method="post" action="{% url 'save_favorite' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="image_url" value="{{ img.src.medium }}">
+                            <input type="hidden" name="alt_text" value="{{ img.alt }}">
+                            <input type="hidden" name="search_query" value="{{ request.GET.q }}">
+                            <input type="hidden" name="image_index" value="{{ forloop.counter }}">
+                            <input type="hidden" name="page" value="{{ page }}">
+                            <button type="submit">Save</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if images %}
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="/?q={{ query }}&page={{ page|add:"-1" }}">⬅ Previous</a>
+            {% endif %}
+            <a href="/?q={{ query }}&page={{ page|add:"1" }}">Next ➡</a>
+        </div>
+    {% endif %}
+</body>
+</html>
+
+-->
+
+
+
+
+
+<!--
+First code
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Search</title>
+    <style>
+        img { width: 200px; margin: 10px; border-radius: 10px; }
+        form { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h2>Search for Images</h2>
+    <form method="get">
+        <input type="text" name="q" placeholder="Type something (e.g. cats)" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <h1>Search Results</h1>
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+    {% for img in images %}
+        <div id="img{{ forloop.counter }}" style="border: 1px solid #ccc; padding: 10px;">
+             <img src="{{ img.src.medium }}" alt="{{ img.alt }}" style="width: 200px;">
+             
+
+          {% if img.src.medium in favorite_urls %}
+              <form method="post" action="{% url 'delete_by_url' %}">
+                {% csrf_token %}
+                <input type="hidden" name="image_url" value="{{ img.src.medium }}">
+                <input type="hidden" name="search_query" value="{{ request.GET.q }}">
+                <input type="hidden" name="image_index" value="{{ forloop.counter }}">
+                <input type="hidden" name="page" value="{{ page }}">
+                <button type="submit">Remove</button>
+              </form>
+
+
+          {% else %}
+            
+             <form method="post" action="{% url 'save_favorite' %}">
+                {% csrf_token %}
+                <input type="hidden" name="image_url" value="{{ img.src.medium }}">
+                <input type="hidden" name="alt_text" value="{{ img.alt }}">
+                <input type="hidden" name="search_query" value="{{ request.GET.q }}">
+                <input type="hidden" name="image_index" value="{{ forloop.counter }}">
+                <input type="hidden" name="page" value="{{ page }}">
+                <button type="submit">Add to Favorite</button>
+             </form>
+           
+          {% endif %}
+        </div>
+    {% endfor %}
+</div>
+
+{% if images %}
+    <div style="margin-top: 30px;">
+        {% if page > 1 %}
+            <a href="/?q={{ query }}&page={{ page|add:"-1" }}">⬅ Previous</a>
+        {% endif %}
+        <a href="/?q={{ query }}&page={{ page|add:"1" }}">Next ➡</a>
+    </div>
+{% endif %}
+
+</body>
+</html> 
+-->
