@@ -1,11 +1,11 @@
 
-
 import requests
 import random
+from decouple import config
 
 def fetch_pexels_photos(query=None, page=1):
     headers = {
-        'Authorization': 'FSJwyIOwU8jM3uUp1bJkUam8TfqbGa2G0tY1IENarDFqds6pcFDXMF2X'
+        'Authorization': config('PEXELS_API_KEY')  
     }
 
     if not query:

@@ -3,6 +3,11 @@ import requests
 from django.shortcuts import redirect, render
 from .api import fetch_pexels_photos
 from .models import Favorite
+from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+from django.shortcuts import get_object_or_404
 
 def search_images(request):
     query = request.GET.get('q', '')
@@ -20,28 +25,6 @@ def search_images(request):
     })
 
 
-
-from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
-''''
-def save_favorite(request):
-    if request.method == 'POST':
-        image_url = request.POST.get('image_url')
-        alt_text = request.POST.get('alt_text')
-        search_query = request.POST.get('search_query')  # get current search term
-
-        Favorite.objects.create(image_url=image_url, alt_text=alt_text)
-
-        # redirect back to search with same query
-    if search_query:
-        return redirect(f"/?q={search_query}")
-    else:
-        return redirect('/')
-    
-'''
-from django.shortcuts import redirect
-from .models import Favorite
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def save_favorite(request):
@@ -63,32 +46,17 @@ def save_favorite(request):
     return redirect('/home/')   
 
 
-from django.shortcuts import render
-from .models import Favorite
-
 def view_favorites(request):
     favorites = Favorite.objects.all()
     last_query = request.session.get('last_query', '')
     return render(request, 'gallery/favorites.html', {'favorites': favorites, 'last_query': last_query})
-
-
-
-
-from django.shortcuts import get_object_or_404
 
 def delete_favorite(request, pk):
     fav = get_object_or_404(Favorite, pk=pk)
     fav.delete()
     return redirect('view_favorites')
 
-''''
-def delete_by_url(request):
-    if request.method == 'POST':
-        image_url = request.POST.get('image_url')
-        search_query = request.POST.get('search_query')
-        Favorite.objects.filter(image_url=image_url).delete()
-    return redirect(f"/?q={search_query}")
-'''
+
 
 def delete_by_url(request):
     if request.method == 'POST':
@@ -105,21 +73,14 @@ def delete_by_url(request):
             return redirect(f"/home/?q={search_query}&page={page}")
         else:
             return redirect('/home/')
-    
-
-
-
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
-from django.shortcuts import render, redirect
-
+        
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)  # Log the user in after register
-            return redirect('/')
+            return redirect('/home/')
     else:
         form = UserCreationForm()
     return render(request, 'gallery/register.html', {'form': form})

@@ -257,3 +257,217 @@ body {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+/* Responsive Styles for Smaller Screens */
+@media (max-width: 768px) {
+  .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    background-color: rgb(0, 0, 0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #e60023;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+  }
+
+  .camera-icon {
+    font-size: 1.6rem;
+    margin-right: 0.4rem;
+    color: #e60023;
+  }
+
+  /* Hide hamburger menu */
+  .hamburger {
+    display: none;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 0 0 auto;
+  }
+
+  .nav-links a,
+  .nav-links span,
+  .nav-links form button {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+    color: #fcfcfc;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 10px;
+    transition: background-color 0.2s ease;
+  }
+
+  .nav-links a:hover,
+  .nav-links form button:hover {
+    background-color: #196002;
+  }
+
+  .favorites-link {
+    background-color: #e60023;
+    color: white !important;
+  }
+
+  .favorites-link:hover {
+    background-color: #ad081b !important;
+  }
+
+  .hero-section {
+    background-image: url("https://images.unsplash.com/photo-1552361308-5b91dc7a3afd?q=80&w=360&auto=format&fit=crop");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 500px;
+    padding-top: 0px;
+    margin-top: -60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: white;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  .quote {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #f0f0f0;
+    text-align: center;
+    margin: 1rem auto;
+    max-width: 70%;
+    line-height: 1.4;
+    padding-top: 0px;
+  }
+
+  .search-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    padding: 0.3rem;
+    box-sizing: border-box;
+  }
+
+  .search-form input[type="text"] {
+    flex: 1;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+    border: none;
+    background-color: transparent;
+    outline: none;
+    color: #333;
+  }
+
+  .search-form button,
+  #micBtn {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+    border: none;
+    background-color: #e60023;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  #micBtn {
+    background-color: rgb(100, 177, 135);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .search-form button {
+    border-radius: 0 30px 30px 0;
+    padding: 0.6rem 1rem;
+  }
+
+  .search-form button:hover,
+  #micBtn:hover {
+    background-color: #ad081b;
+  }
+
+  /* Very small screens */
+  @media (max-width: 400px) {
+    .logo {
+      font-size: 1.3rem;
+    }
+
+    .camera-icon {
+      font-size: 1.4rem;
+    }
+
+    .nav-links a,
+    .nav-links span,
+    .nav-links form button {
+      padding: 0.3rem 0.5rem;
+      font-size: 0.7rem;
+      border-radius: 8px;
+    }
+
+    .quote {
+      font-size: 0.8rem;
+      margin: 0.8rem auto;
+      max-width: 60%;
+    }
+
+    .search-form {
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    .search-form input[type="text"],
+    .search-form button,
+    #micBtn {
+      font-size: 0.8rem;
+      padding: 0.5rem 0.7rem;
+    }
+
+    #micBtn {
+      width: 32px;
+      height: 32px;
+    }
+  }
+}

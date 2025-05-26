@@ -5,15 +5,18 @@
 <head>
     <title>Visual World</title>
 
-    <link rel="stylesheet" href="{% static 'style.css' %}?v=2">
+    
+    <link rel="stylesheet" href="{% static 'style.css' %}?v=3">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
 </head>
 <body>
     
     <header class="header">
-        <a href="/" class="logo"><span class="camera-icon">📽️</span>Visual World</a>
+        <a href="/home/" class="logo"><span class="camera-icon">📽️</span>Visual World</a>
         <div class="nav-links">
-            <a href="/">Home</a>
+            <a href="/home/">Home</a>
             <a href="/favorites/" class="favorites-link">Favorites</a>
 
             {% if user.is_authenticated %}
@@ -30,6 +33,7 @@
         </div>
     </header>
 
+
 <main class="main-content">
     <div class="hero-section">
         
@@ -40,10 +44,12 @@
         <br>
 
         <form method="get" class="search-form">
-            <input type="text" name="q" placeholder="Type something (e.g. cats)" required 
+            <input type="text" id="searchInput" name="q" placeholder="Type something (e.g. cats)" required 
                    value="{{ request.GET.q|default:'' }}">
+                   <button type="button" id="micBtn" style="font-size: 20px; cursor:pointer;background-color: rgb(100, 177, 135);">🎤</button>
             <button type="submit">Search</button>
         </form>
+        
        
     </div>
     
@@ -95,9 +101,9 @@
         {% if images %}
             <div class="pagination">
                 {% if page > 1 %}
-                    <a href="/?q={{ request.GET.q }}&page={{ page|add:"-1" }}">⬅ Previous</a>
+                    <a href="/home/?q={{ request.GET.q }}&page={{ page|add:"-1" }}">⬅ Previous</a>
                 {% endif %}
-                <a href="/?q={{ request.GET.q }}&page={{ page|add:"1" }}">Next ➡</a>
+                <a href="/home/?q={{ request.GET.q }}&page={{ page|add:"1" }}">Next ➡</a>
             </div>
         {% endif %}
         
@@ -115,11 +121,10 @@
   <div style="position:relative; max-width:90%; max-height:90%; margin:auto; display:flex; flex-direction:column; align-items:center;">
     <span onclick="closeModal()" style="position:absolute; top:10px; right:20px; font-size:30px; color:white; cursor:pointer;">&times;</span>
     <img id="modalImage" src="" alt="" style="max-width:100%; max-height:80vh; display:block; margin: 0 auto;">
-    <p id="modalCaption" style="color:#eee; text-align:center; margin-top:30px;"></p>
-    <a id="downloadLink" href="#" download style="color:rgb(255, 255, 255);background-color:red; display:block; text-align:center; margin-top:10px;">Download Image</a>
+    <p id="modalCaption" style="color:#eee; text-align:center; margin-top:10px;"></p>
+    <a id="downloadLink" href="#" download style="color:white; background-color:red; padding:10px 20px; border-radius:5px; text-decoration:none; display:block; text-align:center; margin-top:10px;">Download Image</a>
   </div>
 </div>
-
 
 
 <script>
@@ -150,142 +155,41 @@ window.onclick = function(event) {
 }
 </script>
 
+
+
+
+
+<script>
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    alert("Your browser does not support Speech Recognition.");
+  } else {
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+
+    const micBtn = document.getElementById('micBtn');
+    const searchInput = document.getElementById('searchInput');
+
+    micBtn.addEventListener('click', () => {
+      recognition.start();
+      micBtn.textContent = '🎙️ Listening...';
+    });
+
+    recognition.addEventListener('result', (event) => {
+      const transcript = event.results[0][0].transcript;
+      searchInput.value = transcript;
+      micBtn.textContent = '🎤';
+    });
+
+    recognition.addEventListener('end', () => {
+      micBtn.textContent = '🎤';
+    });
+  }
+</script>
+
+
+
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-<!--
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Image Search</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-</head>
-<body>
-    <h2>Search for Images</h2>
-    <form method="get">
-        <input type="text" name="q" placeholder="Type something (e.g. cats)" required>
-        <button type="submit">Search</button>
-    </form>
-
-    <h1>Search Results</h1>
-
-    <div class="image-grid">
-        {% for img in images %}
-            <div class="image-card" id="img{{ forloop.counter }}">
-                <img src="{{ img.src.medium }}" alt="{{ img.alt }}">
-                <div class="image-actions">
-                    {% if img.src.medium in favorite_urls %}
-                        <form method="post" action="{% url 'delete_by_url' %}">
-                            {% csrf_token %}
-                            <input type="hidden" name="image_url" value="{{ img.src.medium }}">
-                            <input type="hidden" name="search_query" value="{{ request.GET.q }}">
-                            <input type="hidden" name="image_index" value="{{ forloop.counter }}">
-                            <input type="hidden" name="page" value="{{ page }}">
-                            <button type="submit">Remove</button>
-                        </form>
-                    {% else %}
-                        <form method="post" action="{% url 'save_favorite' %}">
-                            {% csrf_token %}
-                            <input type="hidden" name="image_url" value="{{ img.src.medium }}">
-                            <input type="hidden" name="alt_text" value="{{ img.alt }}">
-                            <input type="hidden" name="search_query" value="{{ request.GET.q }}">
-                            <input type="hidden" name="image_index" value="{{ forloop.counter }}">
-                            <input type="hidden" name="page" value="{{ page }}">
-                            <button type="submit">Save</button>
-                        </form>
-                    {% endif %}
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-
-    {% if images %}
-        <div class="pagination">
-            {% if page > 1 %}
-                <a href="/?q={{ query }}&page={{ page|add:"-1" }}">⬅ Previous</a>
-            {% endif %}
-            <a href="/?q={{ query }}&page={{ page|add:"1" }}">Next ➡</a>
-        </div>
-    {% endif %}
-</body>
-</html>
-
--->
-
-
-
-
-
-<!--
-First code
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Image Search</title>
-    <style>
-        img { width: 200px; margin: 10px; border-radius: 10px; }
-        form { margin-bottom: 20px; }
-    </style>
-</head>
-<body>
-    <h2>Search for Images</h2>
-    <form method="get">
-        <input type="text" name="q" placeholder="Type something (e.g. cats)" required>
-        <button type="submit">Search</button>
-    </form>
-
-    <h1>Search Results</h1>
-
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
-    {% for img in images %}
-        <div id="img{{ forloop.counter }}" style="border: 1px solid #ccc; padding: 10px;">
-             <img src="{{ img.src.medium }}" alt="{{ img.alt }}" style="width: 200px;">
-             
-
-          {% if img.src.medium in favorite_urls %}
-              <form method="post" action="{% url 'delete_by_url' %}">
-                {% csrf_token %}
-                <input type="hidden" name="image_url" value="{{ img.src.medium }}">
-                <input type="hidden" name="search_query" value="{{ request.GET.q }}">
-                <input type="hidden" name="image_index" value="{{ forloop.counter }}">
-                <input type="hidden" name="page" value="{{ page }}">
-                <button type="submit">Remove</button>
-              </form>
-
-
-          {% else %}
-            
-             <form method="post" action="{% url 'save_favorite' %}">
-                {% csrf_token %}
-                <input type="hidden" name="image_url" value="{{ img.src.medium }}">
-                <input type="hidden" name="alt_text" value="{{ img.alt }}">
-                <input type="hidden" name="search_query" value="{{ request.GET.q }}">
-                <input type="hidden" name="image_index" value="{{ forloop.counter }}">
-                <input type="hidden" name="page" value="{{ page }}">
-                <button type="submit">Add to Favorite</button>
-             </form>
-           
-          {% endif %}
-        </div>
-    {% endfor %}
-</div>
-
-{% if images %}
-    <div style="margin-top: 30px;">
-        {% if page > 1 %}
-            <a href="/?q={{ query }}&page={{ page|add:"-1" }}">⬅ Previous</a>
-        {% endif %}
-        <a href="/?q={{ query }}&page={{ page|add:"1" }}">Next ➡</a>
-    </div>
-{% endif %}
-
-</body>
-</html> 
--->
